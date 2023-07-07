@@ -20,6 +20,10 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->timestamp('read_at')->nullable();
             $table->softDeletes();
+
+            $table->primary([
+                'user_id' , 'message_id'
+            ]);
         });
     }
 

@@ -20,6 +20,10 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->enum('role' , ['admin', 'member'])->default('member');
             $table->timestamp('joined_at');
+
+            $table->primary([
+                'conversation_id' , 'user_id'
+            ]);
         });
     }
 
