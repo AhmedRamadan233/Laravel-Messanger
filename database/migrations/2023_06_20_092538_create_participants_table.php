@@ -21,9 +21,8 @@ return new class extends Migration
             $table->enum('role' , ['admin', 'member'])->default('member');
             $table->timestamp('joined_at');
 
-            $table->primary([
-                'conversation_id' , 'user_id'
-            ]);
+            $table->primary(['conversation_id', 'user_id']);
+
         });
     }
 

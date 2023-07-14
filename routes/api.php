@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ConversationsController;
+use App\Http\Controllers\MessagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::middleware('auth:sanctum')->group(function(){
+    Route::get('conversation' , [ConversationsController::class,'index']);
+    Route::get('conversation/{conversation}' , [ConversationsController::class,'show']);
+    Route::post('conversation/{conversation}/participants' , [ConversationsController::class,'addParticipant']);
+    Route::delete('conversation/{conversation}/participants' , [ConversationsController::class,'removeParticipants']);
+
+
+
+    Route::get('conversation/{id}/messages' , [MessagesController::class,'index']);
+    Route::post('messages' , [MessagesController::class,'store']);
+    Route::delete('messages/{id}' , [MessagesController::class,'destroy']);
+
+// });
