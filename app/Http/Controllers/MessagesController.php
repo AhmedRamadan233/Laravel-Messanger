@@ -131,7 +131,7 @@ class MessagesController extends Controller
             ],
         ]);
 
-        $user = User::find(1); // Update this line to retrieve the user based on your requirements
+        $user = User::find(2); // Update this line to retrieve the user based on your requirements
         $conversation_id = $request->input('conversation_id');
         $user_id = $request->input('user_id');
 

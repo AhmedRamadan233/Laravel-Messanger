@@ -11,43 +11,35 @@ use Illuminate\Support\Facades\DB;
 
 class MessangerController extends Controller
 {
-    public function index()
+    public function index($id = null)
     {
         $user = Auth::user();
         $friends = User::where('id', '<>', $user->id)
-            ->orderBy('name' )
-            ->paginate();  
-            
-            
-            $chats = $user->conversations()
-    ->with([
-        'lastMessage',
-        'participants' => function ($builder) use ($user) {
-            $builder->where('users.id', '<>', $user->id);
-        }
-    ])
-    ->get();
+            ->orderBy('name')
+            ->paginate();
 
-       
-       
-                // $chats = Conversation::whereHas('participants', function ($query) use ($user) {
-        //     $query->where('user_id', $user->id);
-        // })
-        // ->with([
-        //     'lastMessage', 
-        //     'participants' => function ($builder) use ($user) {
-        //         $builder->where('users.id', '<>', $user->id);
-        //     },
-        //     'participants.user' // Load the 'user' relationship on the 'participants' model
-        // ])
-        // ->latest('last_message_id')
-        // ->get();
-    
-// return $chats;
-        return view('messanger', 
-        [
+        $chats = $user->conversations()
+            ->with([
+                'lastMessage',
+                'participants' => function ($builder) use ($user) {
+                    $builder->where('users.id', '<>', $user->id);
+                }
+            ])
+            ->get();
+
+        $messages = [];
+        if ($id) {
+            $chat = $chats->where('id', $id)->first();
+            if ($chat) {
+                $messages = $chat->messages()->with('user')->paginate();
+            }
+        }
+
+        return view('messanger', [
             'friends' => $friends,
-            'chats' => $chats
+            'chats' => $chats,
+            'messages' => $messages,
         ]);
     }
+
 }

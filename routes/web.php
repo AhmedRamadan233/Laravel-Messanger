@@ -19,8 +19,11 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [MessangerController::class, 'index'])->middleware('auth');
+Route::get('/{id?}', [MessangerController::class, 'index'])->middleware('auth')->name('messanger');
 
+// Route::get('/{id}', [MessangerController::class, 'index'])->middleware('auth');
+
+// Route without id parameter
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
