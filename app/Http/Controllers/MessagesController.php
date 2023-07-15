@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageCreated;
 use App\Models\Conversation;
 use App\Models\Recipient;
 use App\Models\User;
@@ -179,6 +180,8 @@ class MessagesController extends Controller
             ]);
 
             DB::commit();
+
+            broadcast(new MessageCreated($message));
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
