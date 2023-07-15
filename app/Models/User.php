@@ -44,14 +44,28 @@ class User extends Authenticatable
     ];
 
 
-    public function conversaions()
+    public function conversations()
     {
         return $this->belongsToMany(Conversation::class, 'participants')
-            ->latest('last_message_id')->get()
+            ->latest('last_message_id')
             ->withPivot([
                 'role' , 'joined_at'
             ]);
     }
+
+    // public function conversations()
+    // {
+    //     return $this->belongsToMany(Conversation::class, 'participants')
+    //         ->withPivot(['role', 'joined_at'])
+    //         ->latest('last_message_id')
+    //         ->get();
+    // }
+
+//     public function conversations()
+// {
+//     return $this->belongsToMany(Conversation::class, 'participants')
+//         ->latest('last_message_id');
+// }
 
     public function sentMessages(){
         return $this->hasMany(Message::class , 'user_id' , 'id');
