@@ -24,20 +24,26 @@ class MessangerController extends Controller
                 'participants' => function ($builder) use ($user) {
                     $builder->where('users.id', '<>', $user->id);
                 }
-            ])
-            ->get();
+            ])->get();
 
-        $messages = [];
-        if ($id) {
-            $chat = $chats->where('id', $id)->first();
-            if ($chat) {
-                $messages = $chat->messages()->with('user')->paginate();
+        
+            $messages = [];
+            $activeChat = null;
+            if ($id) {
+                $activeChat = $chats->where('id', $id)->first();
+                if ($activeChat) {
+                    $messages = $activeChat->messages()->with('user')->paginate();
+                }
             }
-        }
-
+            if (!$activeChat) {
+                // Handle the case where the chat with the given $id is not found.
+                // For example, you can display an error message or redirect the user.
+                session()->flash('error', 'Chat not found.');
+            }
         return view('messanger', [
             'friends' => $friends,
             'chats' => $chats,
+            'activeChat' => $activeChat,
             'messages' => $messages,
         ]);
     }

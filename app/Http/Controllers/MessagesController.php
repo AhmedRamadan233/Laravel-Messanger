@@ -27,88 +27,7 @@ class MessagesController extends Controller
         return $conversation->messages()->paginate();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'message' => ['required' , 'string'],
-    //         'conversation_id' => [
-    //             Rule::requiredIf(function () use ($request) {
-    //                 return !$request->input('user_id');
-    //             }),
-    //             'int',
-    //             'exists:conversations,id'
-    //         ],
-    //         'user_id' => [
-    //             Rule::requiredIf(function () use ($request) {
-    //                 return !$request->input('conversation_id');
-    //             }),
-    //             'int',
-    //             'exists:users,id'
-    //         ],
-    //     ]);
-    //     // $user = Auth::user(); // Uncomment this line if you have authentication set up
-    //     $user = User::find(1); // Adjust this line to retrieve the user based on your requirements
-
-
-    //     $conversation_id = $request->post('conversation_id');
-    //     // $user_id = $request->post('user_id');
-    //     $user_id = $request->post('user_id');
-
-
-        
-
-    //     DB::beginTransaction();
-    //     if ($conversation_id){
-    //         $conversation = $user->conversaions()->findOrFail($conversation_id);
-    //     }else {
-    //         $conversation = Conversation::where('type', '=', 'peer' )->whereHas('participants' , function ($builder){
-    //             $builder->join('participants as participants2' , 'participants2.conversation_id' , '=' , 'participants.conversation_id')
-    //                 ->where('participants.user_id', $user_id)
-    //                 ->where('participants2.user_id', $user->id);
-    //         })->first();
-
-    //         if(!$conversation){
-    //             $conversation = Conversation::create([
-    //                 'user_id' => $user->id,
-    //                 'type' => 'peer',
-    //             ]);
-
-    //             $conversation->participants()->attach([
-    //                 $user->id=>['joined_at'=>now()] , 
-    //                 $user_id=> ['joined_at'=>now()],
-    //             ]);
-
-
-    //         }
-
-    //     }
-
-    //     try {
-    //         $message = $conversation->messages()->create([
-    //             'user_id' => $user->user_id,
-    //             'body' => $request->post('message'),
-    //         ]);
-        
-    //         DB::statement('
-    //             INSERT INTO recipients (user_id, message_id)
-    //             SELECT user_id, ? FROM participants 
-    //             WHERE conversation_id = ?
-    //         ', [$message->id, $conversation->id]);
-        
-    //         DB::commit();
-    //     } catch (Throwable $e) {
-    //         DB::rollBack();
-    //         throw $e;
-    //     }
-
-    //     return $message;
-        
-
-        
-    // }
+    
 
     public function store(Request $request)
     {
@@ -131,7 +50,7 @@ class MessagesController extends Controller
             ],
         ]);
 
-        $user = User::find(2); // Update this line to retrieve the user based on your requirements
+        $user = Auth::user(); // Update this line to retrieve the user based on your requirements
         $conversation_id = $request->input('conversation_id');
         $user_id = $request->input('user_id');
 

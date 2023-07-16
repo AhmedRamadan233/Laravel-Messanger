@@ -1839,7 +1839,7 @@
                         <!-- Chat: Content -->
                         <div class="chat-body hide-scrollbar flex-1 h-100">
                             <div class="chat-body-inner h-100">
-                                <div class="py-6 py-lg-12">
+                                <div class="py-6 py-lg-12" id="chat-body">
                                     {{-- <div class="text-center mb-6">
                                         <span class="icon icon-xl text-muted">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
@@ -1939,7 +1939,9 @@
                             <!-- Chat: Files -->
 
                             <!-- Chat: Form -->
-                            <form class="chat-form rounded-pill bg-dark" data-emoji-form="">
+                            <form class="chat-form rounded-pill bg-dark" data-emoji-form="" method="post" action="{{route('api.messages.store')}}">
+                                @csrf
+                                <input type="hidden" name="conversation_id" value="{{$activeChat->id}}"> 
                                 <div class="row align-items-center gx-0">
                                     <div class="col-auto">
                                         <a href="#" class="btn btn-icon btn-link text-body rounded-circle" id="dz-btn">
@@ -1949,7 +1951,7 @@
 
                                     <div class="col">
                                         <div class="input-group">
-                                            <textarea class="form-control px-0" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
+                                            <textarea name="message" class="form-control px-0" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
 
                                             <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
                                                 <span class="icon icon-lg">
@@ -2989,10 +2991,34 @@
                 </div>
             </div>
         </div>
-
+        @if(session()->has('error'))
+            <script>
+                alert('{{ session('error') }}');
+            </script>
+        @endif
         <!-- Scripts -->
         <script src="{{ asset('assets/js/vendor.js') }}"></script>
         <script src="{{ asset('assets/js/template.js') }}"></script>
+        <!-- jQuery CDN (latest version) -->
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+
+        <script src="{{ asset('assets/js/messanger.js') }}"></script>
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script>
+
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
         
+            var pusher = new Pusher('3546f518a9d1b9e9eb74', {
+              cluster: 'eu'
+            });
+        
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+              alert(JSON.stringify(data));
+            });
+          </script>
+
+
     </body>
 </html>
