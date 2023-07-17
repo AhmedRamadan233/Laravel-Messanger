@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/{id?}', [MessangerController::class, 'index'])->middleware('auth')->name('messanger');
+// Route::get('/{id?}', [MessangerController::class, 'index'])->middleware('auth')->name('messanger');
 
 // Route::get('/{id}', [MessangerController::class, 'index'])->middleware('auth');
 
@@ -35,3 +35,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+Route::get('/{id?}', [MessangerController::class, 'index'])
+    ->middleware('auth')
+    ->name('messanger');

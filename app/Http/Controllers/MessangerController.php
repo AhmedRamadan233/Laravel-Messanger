@@ -35,11 +35,6 @@ class MessangerController extends Controller
                     $messages = $activeChat->messages()->with('user')->paginate();
                 }
             }
-            if (!$activeChat) {
-                // Handle the case where the chat with the given $id is not found.
-                // For example, you can display an error message or redirect the user.
-                session()->flash('error', 'Chat not found.');
-            }
         return view('messanger', [
             'friends' => $friends,
             'chats' => $chats,

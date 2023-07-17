@@ -1937,7 +1937,7 @@
                             <div class="dz-preview bg-dark" id="dz-preview-row" data-horizontal-scroll="">
                             </div>
                             <!-- Chat: Files -->
-
+                            @if ($activeChat)
                             <!-- Chat: Form -->
                             <form class="chat-form rounded-pill bg-dark" data-emoji-form="" method="post" action="{{route('api.messages.store')}}">
                                 @csrf
@@ -1969,6 +1969,8 @@
                                 </div>
                             </form>
                             <!-- Chat: Form -->
+                            @endif
+
                         </div>
                         <!-- Chat: Footer -->
                     </div>
@@ -3005,19 +3007,31 @@
         <script src="{{ asset('assets/js/messanger.js') }}"></script>
         <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
         <script>
-
+            const userId = "{{ Auth::user()->id }}"; // Use the user ID directly without any extra characters
             // Enable pusher logging - don't include this in production
             Pusher.logToConsole = true;
-        
+
             var pusher = new Pusher('3546f518a9d1b9e9eb74', {
-              cluster: 'eu'
+                cluster: 'us2',
+                encrypted: true,
+                authEndpoint: 'pusherAuth', // Custom route for authentication
+                auth: {
+                    headers: {
+                        'X-CSRF-Token': $("[name='csrf-token']").attr('content') // CSRF token for Laravel's CSRF protection
+                    }
+                }
             });
+            // $channel_name = 'presence-Messanger.' . $request->channel_name;
+
+            // var channel = pusher.subscribe(`presence-messanger.${userId}`);
+            var channel = pusher.subscribe(`presence-messanger.${userId}`);
+
+
+            channel.bind('new-message', function(data) {
+                alert(JSON.stringify(data));
+            });
+        </script>
         
-            var channel = pusher.subscribe('my-channel');
-            channel.bind('my-event', function(data) {
-              alert(JSON.stringify(data));
-            });
-          </script>
 
 
     </body>
