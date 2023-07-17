@@ -18,9 +18,29 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 
-Broadcast::channel('Messanger.{id}' , function($user , $id){
-    if($user->id === $id){
-        return $user;
-    }
+// Broadcast::channel('Messanger.{id}' , function($user , $id){
+//     if($user->id === $id){
+//         return $user;
+//     }
 
+// });
+
+Broadcast::channel('Messanger.{id}', function ($user, $id) {
+    return (string) $user->id === (string) $id;
 });
+
+// Broadcast::channel('notifications.{userId}', function ($user, $userId) {
+//     if ($user->id == $userId)
+//         return ['id' => $user->id, 'name' => $user->name]; // Return the user array not true/false if user can access to channel
+// });
+
+
+Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
+// Broadcast::channel('messenger.{id}',function ($user,$id){
+//     if($user->id == $id) {
+//         return $user;
+//     }
+// });

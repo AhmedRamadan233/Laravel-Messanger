@@ -3,6 +3,7 @@
 use App\Http\Controllers\MessangerController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\BroadcastController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,6 @@ require __DIR__.'/auth.php';
 Route::get('/{id?}', [MessangerController::class, 'index'])
     ->middleware('auth')
     ->name('messanger');
+
+
+// Route::post('/broadcasting/auth', [BroadcastController::class, 'pusherAuth']);

@@ -3003,36 +3003,75 @@
         <script src="{{ asset('assets/js/template.js') }}"></script>
         <!-- jQuery CDN (latest version) -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
+        {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
 
         <script src="{{ asset('assets/js/messanger.js') }}"></script>
         <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-        <script>
+
+        {{-- <script>
             const userId = "{{ Auth::user()->id }}"; // Use the user ID directly without any extra characters
+            // const userId = "{{Auth::id()}}";
+
             // Enable pusher logging - don't include this in production
             Pusher.logToConsole = true;
+        
+            const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            "authHost": "http://localhost/Laravel/public",
+                authEndpoint:  "/broadcasting/auth",
 
-            var pusher = new Pusher('3546f518a9d1b9e9eb74', {
-                cluster: 'us2',
-                encrypted: true,
-                authEndpoint: 'pusherAuth', // Custom route for authentication
-                auth: {
-                    headers: {
-                        'X-CSRF-Token': $("[name='csrf-token']").attr('content') // CSRF token for Laravel's CSRF protection
-                    }
+            auth: {
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 }
-            });
-            // $channel_name = 'presence-Messanger.' . $request->channel_name;
-
+            }
+        });
+        
             // var channel = pusher.subscribe(`presence-messanger.${userId}`);
-            var channel = pusher.subscribe(`presence-messanger.${userId}`);
-
+            var channel = pusher.subscribe(`presence-Messanger.${userId}`);
 
             channel.bind('new-message', function(data) {
                 alert(JSON.stringify(data));
             });
-        </script>
-        
+        </script> --}}
 
+        <script>
+                const userId = "{{ Auth::user()->id }}"; // Use the user ID directly without any extra characters
+    
+                // Enable pusher logging - don't include this in production
+                Pusher.logToConsole = true;
+            
+                const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+                    cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+                    "authHost": "http://localhost/Laravel/public",
+                    authEndpoint: "/broadcasting/auth",
+    
+                    auth: {
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        }
+                    },
+    
+                    // Add user_info with user_id to subscribe to presence channel
+                    authTransport: 'ajax', // Use AJAX auth transport
+                    auth: {
+                        params: {
+                            user_id: userId,
+                        },
+                    },
+                });
+            
+                var channel = pusher.subscribe(`presence-Messanger.${userId}`, {
+                    // Provide additional user_info here (if needed)
+                    user_info: {
+                        // Additional user data can be added here in a hash format
+                    },
+                });
+    
+                channel.bind('new-message', function(data) {
+                    alert(JSON.stringify(data));
+                });
+        </script>
 
     </body>
 </html>
